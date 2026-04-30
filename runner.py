@@ -319,6 +319,15 @@ class TestFlowRunner:
                 try:
                     self._execute_step(step, dry_run=dry_run, run_root=run_root, step_index=index)
                     step_result["message"] = "Dry run step validated." if dry_run else "Step executed."
+                    if (
+                        not dry_run
+                        and bool(step.get("capture_after_click", False))
+                        and step_result["stepType"] in {"click", "click_xy", "double_click", "right_click"}
+                    ):
+                        step_result["screenshot"] = self._take_step_screenshot(run_root, index, "click")
+                    per_step_wait = max(0.0, float(step.get("wait_after_seconds", 0.0) or 0.0))
+                    if not dry_run and per_step_wait > 0:
+                        time.sleep(per_step_wait)
                     if screenshot_after_each_step and not dry_run:
                         step_result["screenshot"] = self._take_step_screenshot(run_root, index, "step")
                     if not dry_run and post_action_delay > 0 and step_result["stepType"] != "wait":
@@ -475,6 +484,8 @@ class TestFlowRunner:
 
         if step_type == "type_text":
             pyautogui.write(str(step.get("value", "")), interval=0.02)
+            if bool(step.get("press_enter", False)):
+                pyautogui.press("enter")
             return
 
         if step_type == "press_key":
