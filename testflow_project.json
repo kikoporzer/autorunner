@@ -3,6 +3,8 @@
   "settings": {
     "startupDelaySeconds": 3.0,
     "defaultActionPauseSeconds": 1.0,
+    "postActionDelaySeconds": 0.0,
+    "screenshotDelayBeforeSeconds": 0.0,
     "screenshotOnFailure": true,
     "screenshotAfterEachStep": true,
     "stopHotkey": "f8",
@@ -346,6 +348,28 @@
           "enabled": true
         }
       ]
+    },
+    "123": {
+      "name": "123",
+      "description": "",
+      "parameters": [],
+      "steps": [
+        {
+          "type": "comment",
+          "text": "new step",
+          "enabled": true
+        },
+        {
+          "type": "run_flow",
+          "enabled": true,
+          "flow": "Testtt"
+        },
+        {
+          "type": "screenshot",
+          "enabled": true,
+          "name": "step"
+        }
+      ]
     }
   },
   "testCases": {
@@ -381,6 +405,26 @@
       "endedAt": "2026-04-30T19:26:01",
       "durationSeconds": 32.117,
       "runFolder": "runs\\2026-04-30_192529_Testtt"
+    },
+    {
+      "runId": "20260430_195417_flow_123",
+      "kind": "flow",
+      "name": "123",
+      "status": "passed",
+      "startedAt": "2026-04-30T19:54:17",
+      "endedAt": "2026-04-30T19:54:17",
+      "durationSeconds": 0.001,
+      "runFolder": "runs\\2026-04-30_195417_123"
+    },
+    {
+      "runId": "20260430_195426_flow_123",
+      "kind": "flow",
+      "name": "123",
+      "status": "passed",
+      "startedAt": "2026-04-30T19:54:26",
+      "endedAt": "2026-04-30T19:54:56",
+      "durationSeconds": 29.525,
+      "runFolder": "runs\\2026-04-30_195426_123"
     }
   ]
 }

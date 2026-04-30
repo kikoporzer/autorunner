@@ -295,6 +295,7 @@ class TestFlowRunner:
 
         screenshot_after_each_step = bool(self.project.get("settings", {}).get("screenshotAfterEachStep", False))
         screenshot_on_failure = bool(self.project.get("settings", {}).get("screenshotOnFailure", True))
+        post_action_delay = max(0.0, float(self.project.get("settings", {}).get("postActionDelaySeconds", 0.0)))
         default_pause = float(self.project.get("settings", {}).get("defaultActionPauseSeconds", 0.1))
         if pyautogui is not None:
             pyautogui.PAUSE = default_pause
@@ -320,6 +321,8 @@ class TestFlowRunner:
                     step_result["message"] = "Dry run step validated." if dry_run else "Step executed."
                     if screenshot_after_each_step and not dry_run:
                         step_result["screenshot"] = self._take_step_screenshot(run_root, index, "step")
+                    if not dry_run and post_action_delay > 0 and step_result["stepType"] != "wait":
+                        time.sleep(post_action_delay)
                     self._log(
                         f"[{datetime.now().strftime('%H:%M:%S')}] Step {index} passed: {step_result['stepType']}"
                     )
@@ -496,6 +499,17 @@ class TestFlowRunner:
             return
 
         if step_type == "screenshot":
+            screenshot_delay = max(
+                0.0,
+                float(
+                    step.get(
+                        "delay_before_seconds",
+                        self.project.get("settings", {}).get("screenshotDelayBeforeSeconds", 0.0),
+                    )
+                ),
+            )
+            if screenshot_delay > 0:
+                time.sleep(screenshot_delay)
             custom_name = str(step.get("name", f"step_{step_index:03d}"))
             safe_name = "".join(c for c in custom_name if c.isalnum() or c in ("-", "_")) or f"step_{step_index:03d}"
             out_path = run_root / "screenshots" / f"{safe_name}.png"

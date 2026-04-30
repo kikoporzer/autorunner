@@ -13,6 +13,8 @@ DEFAULT_PROJECT: dict[str, Any] = {
     "settings": {
         "startupDelaySeconds": 3,
         "defaultActionPauseSeconds": 0.1,
+        "postActionDelaySeconds": 0.0,
+        "screenshotDelayBeforeSeconds": 0.0,
         "screenshotOnFailure": True,
         "screenshotAfterEachStep": False,
         "stopHotkey": "f8",
@@ -190,6 +192,10 @@ def normalize_project_data(data: Any) -> dict[str, Any]:
         {
             "startupDelaySeconds": float(settings.get("startupDelaySeconds", settings.get("startup_delay", project["settings"]["startupDelaySeconds"]))),
             "defaultActionPauseSeconds": float(settings.get("defaultActionPauseSeconds", settings.get("default_pause", project["settings"]["defaultActionPauseSeconds"]))),
+            "postActionDelaySeconds": float(settings.get("postActionDelaySeconds", project["settings"]["postActionDelaySeconds"])),
+            "screenshotDelayBeforeSeconds": float(
+                settings.get("screenshotDelayBeforeSeconds", project["settings"]["screenshotDelayBeforeSeconds"])
+            ),
             "screenshotOnFailure": bool(settings.get("screenshotOnFailure", True)),
             "screenshotAfterEachStep": bool(settings.get("screenshotAfterEachStep", False)),
             "stopHotkey": str(settings.get("stopHotkey", "f8")),

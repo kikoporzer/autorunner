@@ -1,0 +1,274 @@
+{
+  "runId": "20260430_195417_flow_123",
+  "kind": "flow",
+  "name": "123",
+  "startedAt": "2026-04-30T19:54:17",
+  "endedAt": "2026-04-30T19:54:17",
+  "durationSeconds": 0.001,
+  "status": "passed",
+  "dryRun": true,
+  "datasetRowIndex": null,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T19:54:17",
+    "timestamp": "20260430_195417",
+    "runId": "20260430_195417_flow_123"
+  },
+  "warnings": [],
+  "stepResults": [
+    {
+      "stepIndex": 1,
+      "stepType": "comment",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 2,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 3,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 4,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 5,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 6,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 7,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 8,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 9,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 10,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 11,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 12,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 13,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 14,
+      "stepType": "type_text",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 15,
+      "stepType": "press_key",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 16,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 17,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 18,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 19,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 20,
+      "stepType": "screenshot",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "comment",
+      "text": "new step",
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 3.485,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2189,
+      "y": 2116,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.224,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1752,
+      "y": 25,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.968,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1758,
+      "y": 94,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.144,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.112,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.288,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.152,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.224,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 2.568,
+      "enabled": true
+    },
+    {
+      "type": "type_text",
+      "value": "hello",
+      "enabled": true
+    },
+    {
+      "type": "press_key",
+      "key": "enter",
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 4.56,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2105,
+      "y": 30,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.656,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 3665,
+      "y": 22,
+      "enabled": true
+    },
+    {
+      "type": "screenshot",
+      "enabled": true,
+      "name": "step"
+    }
+  ],
+  "runFolder": "runs\\2026-04-30_195417_123"
+}

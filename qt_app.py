@@ -30,6 +30,8 @@ from PySide6.QtWidgets import (
     QListWidget,
     QMainWindow,
     QMessageBox,
+    QDialog,
+    QDialogButtonBox,
     QPushButton,
     QPlainTextEdit,
     QSplitter,
@@ -40,6 +42,8 @@ from PySide6.QtWidgets import (
     QToolBar,
     QVBoxLayout,
     QWidget,
+    QSpinBox,
+    QDoubleSpinBox,
 )
 
 try:
@@ -199,14 +203,11 @@ class TestFlowRunnerQt(QMainWindow):
         self.nav_list = QListWidget()
         for page in [
             "Home",
-            "Recorder",
-            "Flows",
-            "Runs",
-            "Advanced Settings",
-            "Test Cases",
-            "Targets",
-            "Datasets",
-            "Settings",
+            "Record Flow",
+            "Import Excel",
+            "Flow Builder",
+            "Exports",
+            "Advanced",
         ]:
             self.nav_list.addItem(self._label_with_icon(page))
         self.nav_list.currentTextChanged.connect(self._switch_page)
@@ -246,12 +247,6 @@ class TestFlowRunnerQt(QMainWindow):
         log_layout.addWidget(self.log_text)
         root_layout.addWidget(log_panel, stretch=0)
 
-        # Hide advanced/internal pages from the primary navigation.
-        for hidden_label in ["Test Cases", "Targets", "Datasets", "Settings"]:
-            items = self.nav_list.findItems(hidden_label, Qt.MatchExactly)
-            for item in items:
-                item.setHidden(True)
-
         self.nav_list.setCurrentRow(0)
 
     def _build_toolbar(self) -> None:
@@ -264,7 +259,7 @@ class TestFlowRunnerQt(QMainWindow):
         bar.addAction(a_save)
 
         a_record = QAction("⏺ Record Flow", self)
-        a_record.triggered.connect(lambda: self._switch_page("Recorder"))
+        a_record.triggered.connect(lambda: self._switch_page("Record Flow"))
         bar.addAction(a_record)
 
         a_import = QAction("📥 Import Excel/CSV", self)
@@ -272,11 +267,11 @@ class TestFlowRunnerQt(QMainWindow):
         bar.addAction(a_import)
 
         a_flows = QAction("🧩 Flows", self)
-        a_flows.triggered.connect(lambda: self._switch_page("Flows"))
+        a_flows.triggered.connect(lambda: self._switch_page("Flow Builder"))
         bar.addAction(a_flows)
 
         a_runs = QAction("▶ Runs", self)
-        a_runs.triggered.connect(lambda: self._switch_page("Runs"))
+        a_runs.triggered.connect(lambda: self._switch_page("Exports"))
         bar.addAction(a_runs)
 
         a_stop = QAction("⏹ Stop", self)
@@ -285,6 +280,7 @@ class TestFlowRunnerQt(QMainWindow):
 
     def _build_pages(self) -> None:
         self.page_home = self._page_home()
+        self.page_import = self._page_import()
         self.page_test_cases = self._page_test_cases()
         self.page_flows = self._page_flows()
         self.page_targets = self._page_targets()
@@ -293,16 +289,19 @@ class TestFlowRunnerQt(QMainWindow):
         self.page_runs = self._page_run_center()
         self.page_settings = self._page_settings()
         self.page_advanced = self._page_advanced()
+        self.page_exports = self._page_exports()
 
         for p in [
             self.page_home,
             self.page_recorder,
+            self.page_import,
             self.page_flows,
-            self.page_runs,
+            self.page_exports,
             self.page_advanced,
             self.page_test_cases,
             self.page_targets,
             self.page_datasets,
+            self.page_runs,
             self.page_settings,
         ]:
             self.pages.addWidget(p)
@@ -346,7 +345,7 @@ class TestFlowRunnerQt(QMainWindow):
         title = QLabel("Welcome")
         title.setObjectName("title")
         l.addWidget(title)
-        subtitle = QLabel("Start with one of these actions")
+        subtitle = QLabel("Create or import a flow in under a minute")
         subtitle.setObjectName("muted")
         l.addWidget(subtitle)
 
@@ -355,16 +354,16 @@ class TestFlowRunnerQt(QMainWindow):
         ql = QGridLayout(quick)
         b_record = QPushButton("⏺ Record Flow")
         b_record.setMinimumHeight(56)
-        b_record.clicked.connect(lambda: self._switch_page("Recorder"))
+        b_record.clicked.connect(lambda: self._switch_page("Record Flow"))
         b_import = QPushButton("📥 Import Excel/CSV")
         b_import.setMinimumHeight(56)
         b_import.clicked.connect(self._quick_import_excel)
         b_flows = QPushButton("🧩 Open Flows")
         b_flows.setMinimumHeight(56)
-        b_flows.clicked.connect(lambda: self._switch_page("Flows"))
+        b_flows.clicked.connect(lambda: self._switch_page("Flow Builder"))
         b_runs = QPushButton("▶ Open Runs")
         b_runs.setMinimumHeight(56)
-        b_runs.clicked.connect(lambda: self._switch_page("Runs"))
+        b_runs.clicked.connect(lambda: self._switch_page("Exports"))
         ql.addWidget(b_record, 0, 0)
         ql.addWidget(b_import, 0, 1)
         ql.addWidget(b_flows, 1, 0)
@@ -394,10 +393,65 @@ class TestFlowRunnerQt(QMainWindow):
         l.addWidget(group, stretch=1)
         return w
 
+    def _page_import(self) -> QWidget:
+        w = QWidget()
+        l = QVBoxLayout(w)
+        title = QLabel("Import Excel/CSV")
+        title.setObjectName("title")
+        l.addWidget(title)
+        subtitle = QLabel("Bring in test steps from Excel/CSV, or load a dataset.")
+        subtitle.setObjectName("muted")
+        l.addWidget(subtitle)
+
+        panel = QFrame()
+        panel.setObjectName("panel")
+        gl = QGridLayout(panel)
+        b_cases = QPushButton("Import Test Cases")
+        b_cases.setMinimumHeight(56)
+        b_cases.clicked.connect(self.import_test_cases_file)
+        b_data = QPushButton("Import Dataset")
+        b_data.setMinimumHeight(56)
+        b_data.clicked.connect(self.import_dataset_file)
+        b_preview = QPushButton("Open Datasets (Advanced)")
+        b_preview.setMinimumHeight(48)
+        b_preview.clicked.connect(lambda: self._switch_page("Advanced"))
+        gl.addWidget(b_cases, 0, 0)
+        gl.addWidget(b_data, 0, 1)
+        gl.addWidget(b_preview, 1, 0, 1, 2)
+        l.addWidget(panel)
+        l.addStretch(1)
+        return w
+
+    def _page_exports(self) -> QWidget:
+        w = QWidget()
+        l = QVBoxLayout(w)
+        title = QLabel("Exports")
+        title.setObjectName("title")
+        l.addWidget(title)
+        subtitle = QLabel("Open HTML reports quickly, or export your full project ZIP.")
+        subtitle.setObjectName("muted")
+        l.addWidget(subtitle)
+
+        row = QHBoxLayout()
+        b_refresh = QPushButton("Refresh Runs")
+        b_refresh.clicked.connect(self.refresh_runs_table)
+        b_open = QPushButton("Open Selected HTML Report")
+        b_open.clicked.connect(self.open_selected_report)
+        b_zip = QPushButton("Export Project ZIP")
+        b_zip.clicked.connect(self.export_project_zip)
+        row.addWidget(b_refresh)
+        row.addWidget(b_open)
+        row.addWidget(b_zip)
+        row.addStretch(1)
+        l.addLayout(row)
+
+        l.addWidget(self._page_run_center(), stretch=1)
+        return w
+
     def _page_advanced(self) -> QWidget:
         w = QWidget()
         l = QVBoxLayout(w)
-        title = QLabel("Advanced Settings")
+        title = QLabel("Advanced")
         title.setObjectName("title")
         l.addWidget(title)
         subtitle = QLabel("Everything beyond the day-to-day workflow")
@@ -492,6 +546,17 @@ class TestFlowRunnerQt(QMainWindow):
         rl.addWidget(meta)
 
         steps_toolbar = QHBoxLayout()
+        if kind == "flow":
+            for label, step in [
+                ("Click", {"type": "click", "target": "", "enabled": True}),
+                ("Type", {"type": "type_text", "value": "", "enabled": True}),
+                ("Wait", {"type": "wait", "seconds": 1.0, "enabled": True}),
+                ("Screenshot", {"type": "screenshot", "name": "step", "enabled": True}),
+                ("Subflow", {"type": "run_flow", "flow": "", "enabled": True}),
+            ]:
+                bq = QPushButton(label)
+                bq.clicked.connect(lambda _=False, s=step: self._add_quick_step(s))
+                steps_toolbar.addWidget(bq)
         for label, fn in [
             ("＋ Add Step", self._add_step),
             ("⧉ Duplicate Step", self._duplicate_step),
@@ -510,6 +575,8 @@ class TestFlowRunnerQt(QMainWindow):
         table.setSelectionBehavior(QTableWidget.SelectRows)
         table.setEditTriggers(QTableWidget.NoEditTriggers)
         table.itemSelectionChanged.connect(self._on_step_selected)
+        if kind == "flow":
+            table.itemDoubleClicked.connect(lambda _item: self._guided_edit_selected_step())
         rl.addWidget(table, stretch=1)
         split.addWidget(right)
         split.setSizes([280, 860])
@@ -697,6 +764,8 @@ class TestFlowRunnerQt(QMainWindow):
         form = QFormLayout(form_box)
         self.set_start_delay = QLineEdit()
         self.set_action_pause = QLineEdit()
+        self.set_post_action_delay = QLineEdit()
+        self.set_screenshot_delay = QLineEdit()
         self.set_stop_hotkey = QLineEdit()
         self.set_record_stop_hotkey = QLineEdit()
         self.set_expected_res = QLineEdit()
@@ -704,6 +773,8 @@ class TestFlowRunnerQt(QMainWindow):
         self.set_shot_each = QCheckBox("Screenshot after each step")
         form.addRow("Startup delay (s)", self.set_start_delay)
         form.addRow("Default action pause (s)", self.set_action_pause)
+        form.addRow("Post-action delay (s)", self.set_post_action_delay)
+        form.addRow("Before screenshot delay (s)", self.set_screenshot_delay)
         form.addRow("Stop hotkey", self.set_stop_hotkey)
         form.addRow("Recording stop hotkey", self.set_record_stop_hotkey)
         form.addRow("Expected resolution", self.set_expected_res)
@@ -764,19 +835,24 @@ class TestFlowRunnerQt(QMainWindow):
         page = self._normalize_nav_label(page)
         index_map = {
             "Home": 0,
+            "Record Flow": 1,
+            "Import Excel": 2,
+            "Flow Builder": 3,
+            "Exports": 4,
+            "Advanced": 5,
+            "Test Cases": 6,
+            "Targets": 7,
+            "Datasets": 8,
+            "Runs": 9,
+            "Settings": 10,
             "Recorder": 1,
-            "Flows": 2,
-            "Runs": 3,
-            "Advanced Settings": 4,
-            "Test Cases": 5,
-            "Targets": 6,
-            "Datasets": 7,
-            "Settings": 8,
+            "Flows": 3,
+            "Advanced Settings": 5,
         }
         i = index_map.get(page, 0)
         self.pages.setCurrentIndex(i)
         self.page_label.setText(f"Page: {page}")
-        self.inspector.setVisible(page in {"Flows", "Test Cases"})
+        self.inspector.setVisible(page in {"Flow Builder", "Test Cases"})
 
     @staticmethod
     def _label_with_icon(page: str) -> str:
@@ -1035,7 +1111,11 @@ class TestFlowRunnerQt(QMainWindow):
         self.current_step_index = idx
         steps = self._steps_ref()
         if 0 <= idx < len(steps):
-            self._load_inspector(steps[idx])
+            # Keep flow builder visual-first: no raw inspector dependency for editing.
+            if self.current_entity_kind == "flow":
+                self._load_inspector(None)
+            else:
+                self._load_inspector(steps[idx])
 
     def _load_inspector(self, step: dict | None) -> None:
         if not step:
@@ -1210,6 +1290,156 @@ class TestFlowRunnerQt(QMainWindow):
         self.save_project()
         self._refresh_steps_after_change()
 
+    def _add_quick_step(self, step: dict) -> None:
+        if self.current_entity_kind == "flow":
+            suggested = str(step.get("type", "comment"))
+            built = self._open_step_builder_dialog(initial_type=suggested, base_step=step)
+            if built is None:
+                return
+            steps = self._steps_ref()
+            if steps is None:
+                return
+            steps.append(built)
+            self.current_step_index = len(steps) - 1
+            self.save_project()
+            self._refresh_steps_after_change()
+            return
+        steps = self._steps_ref()
+        if steps is None:
+            return
+        steps.append(copy.deepcopy(step))
+        self.current_step_index = len(steps) - 1
+        self.save_project()
+        self._refresh_steps_after_change()
+
+    def _guided_edit_selected_step(self) -> None:
+        if self.current_entity_kind != "flow":
+            return
+        steps = self._steps_ref()
+        if self.current_step_index is None or not (0 <= self.current_step_index < len(steps)):
+            return
+        edited = self._open_step_builder_dialog(
+            initial_type=str(steps[self.current_step_index].get("type", "comment")),
+            base_step=steps[self.current_step_index],
+        )
+        if edited is None:
+            return
+        steps[self.current_step_index] = edited
+        self.save_project()
+        self._refresh_steps_after_change()
+
+    def _open_step_builder_dialog(self, *, initial_type: str, base_step: dict | None = None) -> dict | None:
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Step Builder")
+        dialog.resize(520, 320)
+        v = QVBoxLayout(dialog)
+        form = QFormLayout()
+
+        type_combo = QComboBox()
+        supported = [
+            "click",
+            "type_text",
+            "press_key",
+            "wait",
+            "screenshot",
+            "run_flow",
+            "assert_window_title_contains",
+            "assert_file_exists",
+            "comment",
+        ]
+        type_combo.addItems(supported)
+        if initial_type in supported:
+            type_combo.setCurrentText(initial_type)
+
+        target_combo = QComboBox()
+        target_combo.setEditable(True)
+        target_combo.addItem("")
+        for tname in sorted(self.data.get("targets", {}).keys()):
+            target_combo.addItem(str(tname))
+
+        flow_combo = QComboBox()
+        flow_combo.setEditable(True)
+        flow_combo.addItem("")
+        for fname in sorted(self.data.get("flows", {}).keys()):
+            flow_combo.addItem(str(fname))
+
+        value_edit = QLineEdit()
+        key_edit = QLineEdit()
+        path_edit = QLineEdit()
+        desc_edit = QLineEdit()
+        seconds_spin = QDoubleSpinBox()
+        seconds_spin.setRange(0, 3600)
+        seconds_spin.setDecimals(3)
+        seconds_spin.setSingleStep(0.1)
+        enabled_check = QCheckBox("Enabled")
+        enabled_check.setChecked(True)
+
+        form.addRow("Action", type_combo)
+        form.addRow("Target", target_combo)
+        form.addRow("Subflow", flow_combo)
+        form.addRow("Value/Text", value_edit)
+        form.addRow("Key", key_edit)
+        form.addRow("Path", path_edit)
+        form.addRow("Seconds", seconds_spin)
+        form.addRow("Description", desc_edit)
+        form.addRow("", enabled_check)
+        v.addLayout(form)
+
+        if base_step:
+            enabled_check.setChecked(bool(base_step.get("enabled", True)))
+            target_combo.setCurrentText(str(base_step.get("target", "")))
+            flow_combo.setCurrentText(str(base_step.get("flow", "")))
+            value_edit.setText(str(base_step.get("value", base_step.get("text", ""))))
+            key_edit.setText(str(base_step.get("key", "")))
+            path_edit.setText(str(base_step.get("path", "")))
+            try:
+                seconds_spin.setValue(float(base_step.get("seconds", 0.0)))
+            except Exception:
+                seconds_spin.setValue(0.0)
+            desc_edit.setText(str(base_step.get("description", base_step.get("text", ""))))
+
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        v.addWidget(buttons)
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+
+        if dialog.exec() != QDialog.Accepted:
+            return None
+
+        step_type = type_combo.currentText().strip()
+        step: dict = {"type": step_type, "enabled": bool(enabled_check.isChecked())}
+        target = target_combo.currentText().strip()
+        flow = flow_combo.currentText().strip()
+        value = value_edit.text()
+        key = key_edit.text().strip()
+        path = path_edit.text().strip()
+        seconds = float(seconds_spin.value())
+        desc = desc_edit.text().strip()
+
+        if step_type == "click":
+            if target:
+                step["target"] = target
+        elif step_type == "type_text":
+            step["value"] = value
+        elif step_type == "press_key":
+            step["key"] = key or "enter"
+        elif step_type == "wait":
+            step["seconds"] = seconds
+        elif step_type == "screenshot":
+            step["name"] = value.strip() or "step"
+        elif step_type == "run_flow":
+            step["flow"] = flow
+        elif step_type == "assert_window_title_contains":
+            step["value"] = value
+        elif step_type == "assert_file_exists":
+            step["path"] = path or value
+        elif step_type == "comment":
+            step["text"] = value or desc or "note"
+
+        if desc and step_type != "comment":
+            step["description"] = desc
+        return step
+
     def _duplicate_step(self) -> None:
         steps = self._steps_ref()
         if self.current_step_index is None or not (0 <= self.current_step_index < len(steps)):
@@ -1247,7 +1477,7 @@ class TestFlowRunnerQt(QMainWindow):
     # ---------------------------
     def _selected_kind_and_name(self) -> tuple[str | None, str | None]:
         nav_page = self._normalize_nav_label(self.nav_list.currentItem().text()) if self.nav_list.currentItem() else ""
-        if nav_page == "Flows":
+        if nav_page == "Flow Builder":
             return "flow", self._selected_entity_name("flow")
         if nav_page == "Test Cases":
             return "test_case", self._selected_entity_name("test_case")
@@ -1289,7 +1519,7 @@ class TestFlowRunnerQt(QMainWindow):
             QMessageBox.critical(self, "Missing Dependency", "pyautogui is not installed. Use Dry Run.")
             return
         delay = float(self.data.get("settings", {}).get("startupDelaySeconds", 3))
-        if not dry_run:
+        if not dry_run and kind != "flow":
             if QMessageBox.question(
                 self,
                 "Run",
@@ -1949,6 +2179,8 @@ class TestFlowRunnerQt(QMainWindow):
         env = self.data.get("environment", {})
         self.set_start_delay.setText(str(settings.get("startupDelaySeconds", 3)))
         self.set_action_pause.setText(str(settings.get("defaultActionPauseSeconds", 0.1)))
+        self.set_post_action_delay.setText(str(settings.get("postActionDelaySeconds", 0.0)))
+        self.set_screenshot_delay.setText(str(settings.get("screenshotDelayBeforeSeconds", 0.0)))
         self.set_stop_hotkey.setText(str(settings.get("stopHotkey", "f8")))
         self.set_record_stop_hotkey.setText(str(settings.get("recordingStopHotkey", "f8")))
         self.set_expected_res.setText(str(env.get("expectedResolution", "")))
@@ -1961,8 +2193,10 @@ class TestFlowRunnerQt(QMainWindow):
         try:
             settings["startupDelaySeconds"] = float(self.set_start_delay.text())
             settings["defaultActionPauseSeconds"] = float(self.set_action_pause.text())
+            settings["postActionDelaySeconds"] = float(self.set_post_action_delay.text())
+            settings["screenshotDelayBeforeSeconds"] = float(self.set_screenshot_delay.text())
         except ValueError:
-            QMessageBox.critical(self, "Invalid", "Startup delay and action pause must be numeric.")
+            QMessageBox.critical(self, "Invalid", "Delay values must be numeric.")
             return
         settings["screenshotOnFailure"] = bool(self.set_shot_fail.isChecked())
         settings["screenshotAfterEachStep"] = bool(self.set_shot_each.isChecked())
