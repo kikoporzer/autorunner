@@ -1,0 +1,250 @@
+{
+  "runId": "20260430_192529_flow_Testtt",
+  "kind": "flow",
+  "name": "Testtt",
+  "startedAt": "2026-04-30T19:25:29",
+  "endedAt": "2026-04-30T19:26:01",
+  "durationSeconds": 32.117,
+  "status": "passed",
+  "dryRun": false,
+  "datasetRowIndex": null,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T19:25:29",
+    "timestamp": "20260430_192529",
+    "runId": "20260430_192529_flow_Testtt"
+  },
+  "warnings": [],
+  "stepResults": [
+    {
+      "stepIndex": 1,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_001.png"
+    },
+    {
+      "stepIndex": 2,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_002.png"
+    },
+    {
+      "stepIndex": 3,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_003.png"
+    },
+    {
+      "stepIndex": 4,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_004.png"
+    },
+    {
+      "stepIndex": 5,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_005.png"
+    },
+    {
+      "stepIndex": 6,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_006.png"
+    },
+    {
+      "stepIndex": 7,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_007.png"
+    },
+    {
+      "stepIndex": 8,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_008.png"
+    },
+    {
+      "stepIndex": 9,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_009.png"
+    },
+    {
+      "stepIndex": 10,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_010.png"
+    },
+    {
+      "stepIndex": 11,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_011.png"
+    },
+    {
+      "stepIndex": 12,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_012.png"
+    },
+    {
+      "stepIndex": 13,
+      "stepType": "type_text",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_013.png"
+    },
+    {
+      "stepIndex": 14,
+      "stepType": "press_key",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_014.png"
+    },
+    {
+      "stepIndex": 15,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_015.png"
+    },
+    {
+      "stepIndex": 16,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_016.png"
+    },
+    {
+      "stepIndex": 17,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_017.png"
+    },
+    {
+      "stepIndex": 18,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": "screenshots/step_step_018.png"
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "wait",
+      "seconds": 3.485,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2189,
+      "y": 2116,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.224,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1752,
+      "y": 25,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.968,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1758,
+      "y": 94,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.144,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.112,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.288,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.152,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.224,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 2.568,
+      "enabled": true
+    },
+    {
+      "type": "type_text",
+      "value": "hello",
+      "enabled": true
+    },
+    {
+      "type": "press_key",
+      "key": "enter",
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 4.56,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2105,
+      "y": 30,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.656,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 3665,
+      "y": 22,
+      "enabled": true
+    }
+  ],
+  "runFolder": "runs\\2026-04-30_192529_Testtt"
+}

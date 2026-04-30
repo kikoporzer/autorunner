@@ -5,10 +5,10 @@ TestFlow Runner is a local-first desktop automation tool for recording and runni
 ## How to run
 1. Create/activate a Python 3.10+ environment.
 2. Install dependencies:
-   - `python3 -m pip install pyautogui pynput`
+   - `python3 -m pip install pyside6 pyautogui pynput`
    - Optional for Excel import: `python3 -m pip install openpyxl`
 3. Start the app:
-   - `python3 autorunner.py`
+   - `python3 qt_app.py`
 
 ## How to create targets
 1. Open `Targets` page.

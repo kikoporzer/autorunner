@@ -1,0 +1,172 @@
+{
+  "runId": "20260430_191537_flow_test2",
+  "kind": "flow",
+  "name": "test2",
+  "startedAt": "2026-04-30T19:15:37",
+  "endedAt": "2026-04-30T19:15:41",
+  "durationSeconds": 3.455,
+  "status": "running",
+  "dryRun": false,
+  "datasetRowIndex": null,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T19:15:37",
+    "timestamp": "20260430_191537",
+    "runId": "20260430_191537_flow_test2"
+  },
+  "warnings": [],
+  "stepResults": [],
+  "errors": [
+    "Step 1: PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call."
+  ],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "wait",
+      "seconds": 3.453,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 3091,
+      "y": 179,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.312,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2529,
+      "y": 145,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.24,
+      "enabled": true
+    },
+    {
+      "type": "double_click",
+      "x": 3512,
+      "y": 220,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.192,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 4.656,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2934,
+      "y": 395,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 3.88,
+      "enabled": true
+    },
+    {
+      "type": "double_click",
+      "x": 209,
+      "y": 876,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.28,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 5.32,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 3313,
+      "y": 521,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 2.56,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2433,
+      "y": 2126,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 2.472,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2353,
+      "y": 2120,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.464,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2264,
+      "y": 2112,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.704,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2194,
+      "y": 2107,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 3.616,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 3618,
+      "y": 19,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 2.2,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2926,
+      "y": 166,
+      "enabled": true
+    }
+  ],
+  "runFolder": "runs\\2026-04-30_191537_test2"
+}

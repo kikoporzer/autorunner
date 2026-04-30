@@ -1,0 +1,41 @@
+[2026-04-30 19:15:41] Run thread failure
+Traceback (most recent call last):
+  File "C:\Users\kikop\PycharmProjects\autorunner\runner.py", line 322, in _run
+    step_result["screenshot"] = self._take_step_screenshot(run_root, index, "step")
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kikop\PycharmProjects\autorunner\runner.py", line 436, in _take_step_screenshot
+    pyautogui.screenshot(str(screenshot_path))
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kikop\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyautogui\__init__.py", line 228, in _couldNotImportPyScreeze
+    raise PyAutoGUIException(
+        "PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call."
+    )
+pyautogui.PyAutoGUIException: PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\kikop\PycharmProjects\autorunner\qt_app.py", line 1147, in _run_thread
+    result = self.active_runner.run_flow(name, dry_run=dry_run)
+  File "C:\Users\kikop\PycharmProjects\autorunner\runner.py", line 52, in run_flow
+    return self._run(
+           ~~~~~~~~~^
+        kind="flow",
+        ^^^^^^^^^^^^
+    ...<5 lines>...
+        test_case_variables={},
+        ^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\kikop\PycharmProjects\autorunner\runner.py", line 334, in _run
+    step_result["screenshot"] = self._take_step_screenshot(run_root, index, "failure")
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kikop\PycharmProjects\autorunner\runner.py", line 436, in _take_step_screenshot
+    pyautogui.screenshot(str(screenshot_path))
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\kikop\AppData\Local\Programs\Python\Python313\Lib\site-packages\pyautogui\__init__.py", line 228, in _couldNotImportPyScreeze
+    raise PyAutoGUIException(
+        "PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call."
+    )
+pyautogui.PyAutoGUIException: PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call.
+

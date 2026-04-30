@@ -1,0 +1,129 @@
+{
+  "runId": "20260430_191327_flow_test",
+  "kind": "flow",
+  "name": "test",
+  "startedAt": "2026-04-30T19:13:27",
+  "endedAt": "2026-04-30T19:13:37",
+  "durationSeconds": 9.95,
+  "status": "passed",
+  "dryRun": false,
+  "datasetRowIndex": null,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T19:13:27",
+    "timestamp": "20260430_191327",
+    "runId": "20260430_191327_flow_test"
+  },
+  "warnings": [],
+  "stepResults": [
+    {
+      "stepIndex": 1,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 2,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 3,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 4,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 5,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 6,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 7,
+      "stepType": "wait",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 8,
+      "stepType": "click_xy",
+      "status": "passed",
+      "message": "Step executed.",
+      "screenshot": ""
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "wait",
+      "seconds": 6.802,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 795,
+      "y": 1569,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.76,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1391,
+      "y": 1658,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 0.664,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 1856,
+      "y": 1683,
+      "enabled": true
+    },
+    {
+      "type": "wait",
+      "seconds": 1.256,
+      "enabled": true
+    },
+    {
+      "type": "click_xy",
+      "x": 2525,
+      "y": 670,
+      "enabled": true
+    }
+  ],
+  "runFolder": "runs\\2026-04-30_191327_test"
+}

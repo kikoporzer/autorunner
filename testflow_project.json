@@ -2,9 +2,9 @@
   "appVersion": "0.1.0",
   "settings": {
     "startupDelaySeconds": 3.0,
-    "defaultActionPauseSeconds": 0.1,
+    "defaultActionPauseSeconds": 1.0,
     "screenshotOnFailure": true,
-    "screenshotAfterEachStep": false,
+    "screenshotAfterEachStep": true,
     "stopHotkey": "f8",
     "recordingStopHotkey": "f8"
   },
@@ -26,10 +26,361 @@
       "y": 300,
       "description": "Auto-suggested from recording",
       "createdAt": "2026-04-30T18:26:35"
+    },
+    "login": {
+      "x": 1093,
+      "y": 1114,
+      "description": "",
+      "createdAt": "2026-04-30T19:34:08"
+    },
+    "bin": {
+      "x": 75,
+      "y": 57,
+      "description": "",
+      "createdAt": "2026-04-30T19:34:15"
+    },
+    "chrome": {
+      "x": 88,
+      "y": 397,
+      "description": "",
+      "createdAt": "2026-04-30T19:34:25"
     }
   },
-  "flows": {},
-  "testCases": {},
+  "flows": {
+    "test": {
+      "name": "test",
+      "description": "Recorded flow",
+      "parameters": [],
+      "steps": [
+        {
+          "type": "wait",
+          "seconds": 6.802,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 795,
+          "y": 1569,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.76,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 1391,
+          "y": 1658,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.664,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 1856,
+          "y": 1683,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.256,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2525,
+          "y": 670,
+          "enabled": true
+        }
+      ]
+    },
+    "test2": {
+      "name": "test2",
+      "description": "Recorded flow",
+      "parameters": [],
+      "steps": [
+        {
+          "type": "wait",
+          "seconds": 3.453,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 3091,
+          "y": 179,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.312,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2529,
+          "y": 145,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.24,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 3512,
+          "y": 220
+        },
+        {
+          "type": "wait",
+          "seconds": 0.192,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 4.656,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2934,
+          "y": 395,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 3.88,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 209,
+          "y": 876
+        },
+        {
+          "type": "wait",
+          "seconds": 0.28,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 5.32,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 3313,
+          "y": 521,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 2.56,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2433,
+          "y": 2126,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 2.472,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2353,
+          "y": 2120,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.464,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2264,
+          "y": 2112,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.704,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2194,
+          "y": 2107,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 3.616,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 3618,
+          "y": 19,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 2.2,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2926,
+          "y": 166,
+          "enabled": true
+        }
+      ]
+    },
+    "Testtt": {
+      "name": "Testtt",
+      "description": "Recorded flow",
+      "parameters": [],
+      "steps": [
+        {
+          "type": "wait",
+          "seconds": 3.485,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2189,
+          "y": 2116,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.224,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 1752,
+          "y": 25,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.968,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 1758,
+          "y": 94,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.144,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.112,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.288,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.152,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 0.224,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 2.568,
+          "enabled": true
+        },
+        {
+          "type": "type_text",
+          "value": "hello",
+          "enabled": true
+        },
+        {
+          "type": "press_key",
+          "key": "enter",
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 4.56,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 2105,
+          "y": 30,
+          "enabled": true
+        },
+        {
+          "type": "wait",
+          "seconds": 1.656,
+          "enabled": true
+        },
+        {
+          "type": "click_xy",
+          "x": 3665,
+          "y": 22,
+          "enabled": true
+        }
+      ]
+    }
+  },
+  "testCases": {
+    "1": {
+      "id": "1",
+      "name": "1",
+      "suite": "",
+      "description": "",
+      "dataset": "",
+      "enabled": true,
+      "variables": {},
+      "steps": []
+    }
+  },
   "datasets": {},
-  "runs": []
+  "runs": [
+    {
+      "runId": "20260430_191327_flow_test",
+      "kind": "flow",
+      "name": "test",
+      "status": "passed",
+      "startedAt": "2026-04-30T19:13:27",
+      "endedAt": "2026-04-30T19:13:37",
+      "durationSeconds": 9.95,
+      "runFolder": "runs\\2026-04-30_191327_test"
+    },
+    {
+      "runId": "20260430_192529_flow_Testtt",
+      "kind": "flow",
+      "name": "Testtt",
+      "status": "passed",
+      "startedAt": "2026-04-30T19:25:29",
+      "endedAt": "2026-04-30T19:26:01",
+      "durationSeconds": 32.117,
+      "runFolder": "runs\\2026-04-30_192529_Testtt"
+    }
+  ]
 }
