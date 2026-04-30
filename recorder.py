@@ -34,6 +34,11 @@ class GlobalClickRecorder:
         self._stop_key_name = "f8"
         self._on_finished: Callable[[list[dict], str], None] | None = None
         self._click_filter: Callable[[int, int, str], bool] | None = None
+        self._record_typing = False
+        self._record_hotkeys = False
+        self._typing_buffer = ""
+        self._active_modifiers: set[str] = set()
+        self._hotkeys_in_progress: set[str] = set()
 
     @staticmethod
     def availability() -> RecorderStatus:
@@ -49,7 +54,14 @@ class GlobalClickRecorder:
 
         return RecorderStatus(available=True, message="Recorder backend is available.")
 
-    def start(self, *, stop_key_name: str = "f8", on_finished: Callable[[list[dict], str], None] | None = None) -> RecorderStatus:
+    def start(
+        self,
+        *,
+        stop_key_name: str = "f8",
+        on_finished: Callable[[list[dict], str], None] | None = None,
+        record_typing: bool = False,
+        record_hotkeys: bool = False,
+    ) -> RecorderStatus:
         if self.is_running:
             return RecorderStatus(False, "Recorder is already running.")
 
@@ -74,6 +86,11 @@ class GlobalClickRecorder:
         self.is_running = True
         self._stop_key_name = stop_key_name.lower().strip()
         self._on_finished = on_finished
+        self._record_typing = bool(record_typing)
+        self._record_hotkeys = bool(record_hotkeys)
+        self._typing_buffer = ""
+        self._active_modifiers = set()
+        self._hotkeys_in_progress = set()
 
         self._last_event_time = time.time()
         self._last_left_click_time = 0.0
@@ -85,6 +102,7 @@ class GlobalClickRecorder:
         def on_click(x, y, button, pressed):
             if not self.is_running or pressed:
                 return
+            self._flush_typing_buffer()
             if callable(click_filter):
                 try:
                     if not click_filter(int(x), int(y), str(button)):
@@ -93,9 +111,7 @@ class GlobalClickRecorder:
                     pass
 
             now = time.time()
-            elapsed = now - self._last_event_time
-            if elapsed >= 0.05:
-                self._append_step({"type": "wait", "seconds": round(elapsed, 3), "enabled": True})
+            self._append_wait_since_last_event(now)
 
             button_name = str(button).lower()
             if "left" in button_name:
@@ -109,14 +125,62 @@ class GlobalClickRecorder:
 
         def on_press(key):
             if self._matches_stop_key(key):
+                self._flush_typing_buffer()
                 self.stop()
                 return False
+            if not self.is_running:
+                return True
+
+            now = time.time()
+            key_name = self._key_to_name(key)
+            if key_name in {"ctrl", "alt", "shift", "cmd"}:
+                self._active_modifiers.add(key_name)
+                self._flush_typing_buffer()
+                return True
+
+            hotkey_recorded = False
+            if self._record_hotkeys and self._active_modifiers:
+                keys = sorted(self._active_modifiers) + [key_name]
+                signature = "+".join(keys)
+                if signature not in self._hotkeys_in_progress:
+                    self._append_wait_since_last_event(now)
+                    self._flush_typing_buffer()
+                    self._append_step({"type": "hotkey", "keys": keys, "enabled": True})
+                    self._last_event_time = now
+                    self._hotkeys_in_progress.add(signature)
+                hotkey_recorded = True
+
+            if hotkey_recorded:
+                return True
+
+            if self._record_typing:
+                char = self._key_to_char(key)
+                if char:
+                    self._append_wait_since_last_event(now)
+                    self._typing_buffer += char
+                    self._last_event_time = now
+                    return True
+
+            special = self._special_press_key_name(key)
+            if special:
+                self._append_wait_since_last_event(now)
+                self._flush_typing_buffer()
+                self._append_step({"type": "press_key", "key": special, "enabled": True})
+                self._last_event_time = now
+            return True
+
+        def on_release(key):
+            key_name = self._key_to_name(key)
+            if key_name in self._active_modifiers:
+                self._active_modifiers.discard(key_name)
+            if not self._active_modifiers:
+                self._hotkeys_in_progress.clear()
             return True
 
         def worker():
             try:
                 self._mouse_listener = mouse.Listener(on_click=on_click)
-                self._keyboard_listener = keyboard.Listener(on_press=on_press)
+                self._keyboard_listener = keyboard.Listener(on_press=on_press, on_release=on_release)
 
                 self._mouse_listener.start()
                 self._keyboard_listener.start()
@@ -128,6 +192,7 @@ class GlobalClickRecorder:
                 self.last_error = str(exc)
                 self._stop_event.set()
             finally:
+                self._flush_typing_buffer()
                 self._close_listeners()
                 self.is_running = False
                 if self._on_finished:
@@ -177,6 +242,17 @@ class GlobalClickRecorder:
         with self._lock:
             self.steps.append(step)
 
+    def _append_wait_since_last_event(self, now: float) -> None:
+        elapsed = now - self._last_event_time
+        if elapsed >= 0.05:
+            self._append_step({"type": "wait", "seconds": round(elapsed, 3), "enabled": True})
+
+    def _flush_typing_buffer(self) -> None:
+        if not self._typing_buffer:
+            return
+        self._append_step({"type": "type_text", "value": self._typing_buffer, "enabled": True})
+        self._typing_buffer = ""
+
     def _record_left_click(self, now: float, x: int, y: int) -> None:
         is_double = False
         if self._last_left_click_xy is not None and self._last_left_click_time > 0 and self._last_left_click_index is not None:
@@ -222,3 +298,41 @@ class GlobalClickRecorder:
 
         except Exception:
             return False
+
+    @staticmethod
+    def _key_to_name(key) -> str:
+        key_char = getattr(key, "char", None)
+        if isinstance(key_char, str) and key_char:
+            return key_char.lower()
+        key_name = getattr(key, "name", "")
+        if key_name:
+            return str(key_name).lower()
+        text = str(key).lower()
+        if "." in text:
+            return text.split(".")[-1]
+        return text
+
+    @staticmethod
+    def _key_to_char(key) -> str:
+        key_char = getattr(key, "char", None)
+        if isinstance(key_char, str) and key_char and key_char.isprintable():
+            return key_char
+        if str(getattr(key, "name", "")).lower() == "space":
+            return " "
+        return ""
+
+    @staticmethod
+    def _special_press_key_name(key) -> str:
+        mapped = {
+            "enter": "enter",
+            "tab": "tab",
+            "esc": "esc",
+            "backspace": "backspace",
+            "delete": "delete",
+            "up": "up",
+            "down": "down",
+            "left": "left",
+            "right": "right",
+        }
+        name = GlobalClickRecorder._key_to_name(key)
+        return mapped.get(name, "")

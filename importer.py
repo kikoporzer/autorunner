@@ -213,8 +213,9 @@ def parse_test_case_rows(rows: list[dict[str, Any]]) -> tuple[dict[str, dict[str
     for idx, row in enumerate(normalized_rows, start=2):
         case_id = str(row.get("TestCaseId", "")).strip()
         if not case_id:
-            errors.append(f"Row {idx}: missing TestCaseId")
-            invalid_rows.append({"row": idx, "reason": "missing TestCaseId"})
+            reason = "missing TestCaseId"
+            errors.append(f"Row {idx}: {reason}")
+            invalid_rows.append({"row": idx, "reason": reason})
             continue
 
         case = grouped.setdefault(
@@ -232,9 +233,13 @@ def parse_test_case_rows(rows: list[dict[str, Any]]) -> tuple[dict[str, dict[str
             },
         )
 
+        prev_errors_len = len(errors)
         step = _build_step_from_row(row, errors, idx)
         if step is None:
-            invalid_rows.append({"row": idx, "reason": "invalid step"})
+            reason = "invalid step"
+            if len(errors) > prev_errors_len:
+                reason = str(errors[-1]).replace(f"Row {idx}: ", "", 1)
+            invalid_rows.append({"row": idx, "reason": reason})
             continue
 
         step_no = str(row.get("StepNo", "")).strip()

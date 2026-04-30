@@ -54,6 +54,7 @@ class AutomationApp:
             pyautogui.FAILSAFE = True
             pyautogui.PAUSE = float(self.data["settings"].get("defaultActionPauseSeconds", 0.1))
 
+        self._configure_style()
         self._build_shell()
         self._setup_exception_handler()
         self._bind_shortcuts()
@@ -66,6 +67,17 @@ class AutomationApp:
     # =====================================================
     # Shell
     # =====================================================
+
+    def _configure_style(self) -> None:
+        style = ttk.Style()
+        try:
+            style.theme_use("clam")
+        except Exception:
+            pass
+        style.configure("TButton", padding=(8, 5))
+        style.configure("TLabel", padding=(0, 1))
+        style.configure("Treeview", rowheight=24)
+        style.configure("Treeview.Heading", padding=(6, 4))
 
     def _build_shell(self) -> None:
         self.root.columnconfigure(0, weight=1)
@@ -234,6 +246,8 @@ class AutomationApp:
         self.root.bind("<Control-d>", lambda e: self._shortcut_duplicate_step())
         self.root.bind("<Command-d>", lambda e: self._shortcut_duplicate_step())
         self.root.bind("<Delete>", lambda e: self._shortcut_delete_step())
+        self.root.bind("<F6>", lambda e: self._shortcut_step_once())
+        self.root.bind("<Shift-F6>", lambda e: self._shortcut_run_from_selected())
 
     def _shortcut_run(self, dry_run: bool) -> None:
         if self.current_entity_kind in {"flow", "test_case"}:
@@ -246,6 +260,12 @@ class AutomationApp:
     def _shortcut_delete_step(self) -> None:
         if self.current_entity_kind in {"flow", "test_case"}:
             self._delete_step()
+
+    def _shortcut_step_once(self) -> None:
+        self.run_selected_step_once()
+
+    def _shortcut_run_from_selected(self) -> None:
+        self.run_selected_from_current_step()
 
     # =====================================================
     # Page router
@@ -445,6 +465,10 @@ class AutomationApp:
         ttk.Button(header_btns, text="Run", command=lambda: self.run_selected("test_case", False)).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Run All Rows", command=self.run_selected_test_case_all_rows).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Dry Run", command=lambda: self.run_selected("test_case", True)).pack(side="left", padx=3)
+        ttk.Button(header_btns, text="Run From Selected Step", command=self.run_selected_from_current_step).pack(
+            side="left", padx=3
+        )
+        ttk.Button(header_btns, text="Step Once", command=self.run_selected_step_once).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Import", command=self.import_test_cases_file).pack(side="left", padx=3)
         ttk.Button(header_btns, text="New", command=self.new_test_case).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Duplicate", command=self.duplicate_test_case).pack(side="left", padx=3)
@@ -818,6 +842,10 @@ class AutomationApp:
         header_btns.grid(row=0, column=1, sticky="e")
         ttk.Button(header_btns, text="Run", command=lambda: self.run_selected("flow", False)).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Dry Run", command=lambda: self.run_selected("flow", True)).pack(side="left", padx=3)
+        ttk.Button(header_btns, text="Run From Selected Step", command=self.run_selected_from_current_step).pack(
+            side="left", padx=3
+        )
+        ttk.Button(header_btns, text="Step Once", command=self.run_selected_step_once).pack(side="left", padx=3)
         ttk.Button(header_btns, text="New", command=self.new_flow).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Duplicate", command=self.duplicate_flow).pack(side="left", padx=3)
         ttk.Button(header_btns, text="Delete", command=self.delete_flow).pack(side="left", padx=3)
@@ -1145,10 +1173,10 @@ class AutomationApp:
         ttk.Checkbutton(options, text="Ignore clicks inside app window", variable=self.rec_opt_ignore_app).grid(
             row=1, column=1, columnspan=2, sticky="w"
         )
-        ttk.Checkbutton(options, text="Record typing (coming later)", variable=self.rec_opt_typing, state="disabled").grid(
+        ttk.Checkbutton(options, text="Record typing", variable=self.rec_opt_typing).grid(
             row=2, column=0, sticky="w"
         )
-        ttk.Checkbutton(options, text="Record hotkeys (coming later)", variable=self.rec_opt_hotkeys, state="disabled").grid(
+        ttk.Checkbutton(options, text="Record hotkeys", variable=self.rec_opt_hotkeys).grid(
             row=2, column=1, sticky="w"
         )
         ttk.Checkbutton(
@@ -1234,7 +1262,12 @@ class AutomationApp:
             self.root.winfo_height(),
         )
         self.recorder.set_click_filter(self._recording_click_filter)
-        status = self.recorder.start(stop_key_name=stop_key, on_finished=self._on_recording_finished)
+        status = self.recorder.start(
+            stop_key_name=stop_key,
+            on_finished=self._on_recording_finished,
+            record_typing=bool(self.rec_opt_typing.get()),
+            record_hotkeys=bool(self.rec_opt_hotkeys.get()),
+        )
         if not status.available:
             messagebox.showerror("Recorder Unavailable", status.message)
             self.rec_state_var.set(status.message)
@@ -1330,6 +1363,26 @@ class AutomationApp:
                         "enabled": True,
                     }
                 )
+                continue
+
+            if t == "type_text":
+                if not self.rec_opt_typing.get():
+                    continue
+                out.append({"type": "type_text", "value": str(step.get("value", "")), "enabled": True})
+                continue
+
+            if t == "hotkey":
+                if not self.rec_opt_hotkeys.get():
+                    continue
+                keys = step.get("keys", [])
+                if isinstance(keys, list) and keys:
+                    out.append({"type": "hotkey", "keys": [str(k) for k in keys], "enabled": True})
+                continue
+
+            if t == "press_key":
+                if not self.rec_opt_typing.get():
+                    continue
+                out.append({"type": "press_key", "key": str(step.get("key", "")), "enabled": True})
                 continue
 
             out.append(step)
@@ -2151,6 +2204,138 @@ class AutomationApp:
             daemon=True,
         )
         thread.start()
+
+    def run_selected_from_current_step(self) -> None:
+        self._run_partial_selected(mode="from_selected")
+
+    def run_selected_step_once(self) -> None:
+        self._run_partial_selected(mode="step_once")
+
+    def _run_partial_selected(self, mode: str) -> None:
+        if self.current_entity_kind not in {"flow", "test_case"} or not self.current_entity_name:
+            messagebox.showwarning("No Selection", "Select a flow/test case and a step first.")
+            return
+        if self.current_step_index is None:
+            messagebox.showwarning("No Step", "Select a step first.")
+            return
+
+        kind = self.current_entity_kind
+        name = self.current_entity_name
+        steps = self._get_steps(kind, name)
+        if not (0 <= self.current_step_index < len(steps)):
+            messagebox.showwarning("Invalid Step", "Selected step index is out of range.")
+            return
+
+        selected = self.current_step_index
+        subset = [copy.deepcopy(steps[selected])] if mode == "step_once" else copy.deepcopy(steps[selected:])
+
+        dataset_idx = None
+        if kind == "test_case":
+            dataset_name = str(self.data["testCases"][name].get("dataset", "")).strip()
+            if dataset_name:
+                idx = simpledialog.askinteger(
+                    "Dataset Row",
+                    f"Dataset '{dataset_name}' row index (0-based):",
+                    initialvalue=0,
+                    minvalue=0,
+                )
+                if idx is None:
+                    return
+                dataset_idx = idx
+
+        delay = float(self.data.get("settings", {}).get("startupDelaySeconds", 3))
+        if pyautogui is None:
+            messagebox.showerror(
+                "Missing Dependency",
+                "pyautogui is not installed. Use Dry Run or install pyautogui for live execution.",
+            )
+            return
+
+        label = "Step Once" if mode == "step_once" else "Run From Selected Step"
+        if not messagebox.askyesno(
+            label,
+            f"{label} for {kind.replace('_', ' ')} '{name}' after {delay:.1f}s?\nSelected step: {selected + 1}",
+        ):
+            return
+
+        thread = threading.Thread(
+            target=self._run_partial_thread,
+            args=(kind, name, subset, delay, dataset_idx, selected + 1, mode),
+            daemon=True,
+        )
+        thread.start()
+
+    def _run_partial_thread(
+        self,
+        kind: str,
+        name: str,
+        subset_steps: list[dict],
+        delay: float,
+        dataset_idx: int | None,
+        selected_step_number: int,
+        mode: str,
+    ) -> None:
+        label = "step_once" if mode == "step_once" else "run_from_selected"
+        self.set_status(f"Running {label} {kind}:{name}")
+        self.append_log(f"Starting {label} for {kind} '{name}' from step {selected_step_number}")
+        try:
+            if delay > 0:
+                self.append_log(f"Waiting {delay:.2f}s before execution...")
+                time.sleep(delay)
+
+            temp_data = copy.deepcopy(self.data)
+            existing_run_ids = {str(r.get("runId", "")) for r in self.data.get("runs", []) if isinstance(r, dict)}
+            temp_name = f"{name}__{label}_{selected_step_number}"
+            if kind == "flow":
+                temp_data.setdefault("flows", {})[temp_name] = {
+                    "name": temp_name,
+                    "description": f"{label} from step {selected_step_number}",
+                    "parameters": [],
+                    "steps": subset_steps,
+                }
+            else:
+                source = self.data["testCases"][name]
+                temp_data.setdefault("testCases", {})[temp_name] = {
+                    "id": temp_name,
+                    "name": temp_name,
+                    "suite": str(source.get("suite", "")),
+                    "description": f"{label} from step {selected_step_number}",
+                    "dataset": str(source.get("dataset", "")),
+                    "enabled": True,
+                    "variables": copy.deepcopy(source.get("variables", {})),
+                    "steps": subset_steps,
+                }
+
+            self.active_runner = TestFlowRunner(temp_data, log_callback=self.append_log)
+            self.active_runner.reset_stop()
+            if kind == "flow":
+                result = self.active_runner.run_flow(temp_name, dry_run=False)
+            else:
+                result = self.active_runner.run_test_case(temp_name, dry_run=False, dataset_row_index=dataset_idx)
+
+            new_runs = []
+            for run in temp_data.get("runs", []):
+                if not isinstance(run, dict):
+                    continue
+                run_id = str(run.get("runId", ""))
+                if run_id and run_id not in existing_run_ids:
+                    new_runs.append(run)
+            if new_runs:
+                self.data.setdefault("runs", []).extend(new_runs)
+            self.save_project()
+            self.append_log(f"{label} finished with status={result.get('status')}")
+            if self.current_page == "Run Center":
+                self.root.after(0, self.refresh_runs_tree)
+        except RunnerExecutionError as exc:
+            self.append_log(f"{label} error: {exc}")
+            self.root.after(0, lambda: messagebox.showerror("Run Error", str(exc)))
+        except Exception as exc:
+            self._log_exception(f"{label} thread failure")
+            self.append_log(f"{label} failure: {exc}")
+            self.root.after(0, lambda: messagebox.showerror("Run Error", str(exc)))
+        finally:
+            self.active_runner = None
+            self.set_status("Idle")
 
     def _run_thread(self, kind: str, name: str, dry_run: bool, delay: float, dataset_idx: int | None) -> None:
         self.set_status(f"Running {kind}:{name}")
