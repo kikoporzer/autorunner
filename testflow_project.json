@@ -1,0 +1,35 @@
+{
+  "appVersion": "0.1.0",
+  "settings": {
+    "startupDelaySeconds": 3.0,
+    "defaultActionPauseSeconds": 0.1,
+    "screenshotOnFailure": true,
+    "screenshotAfterEachStep": false,
+    "stopHotkey": "f8",
+    "recordingStopHotkey": "f8"
+  },
+  "environment": {
+    "name": "Default",
+    "expectedResolution": "",
+    "notes": "",
+    "variables": {}
+  },
+  "targets": {
+    "login_button": {
+      "x": 100,
+      "y": 100,
+      "description": "",
+      "createdAt": "2026-01-01T00:00:00"
+    },
+    "target_001": {
+      "x": 300,
+      "y": 300,
+      "description": "Auto-suggested from recording",
+      "createdAt": "2026-04-30T18:26:35"
+    }
+  },
+  "flows": {},
+  "testCases": {},
+  "datasets": {},
+  "runs": []
+}

@@ -1,0 +1,64 @@
+{
+  "runId": "20260430_180505_test_case_POS001",
+  "kind": "test_case",
+  "name": "POS001",
+  "startedAt": "2026-04-30T18:05:05",
+  "endedAt": "2026-04-30T18:05:05",
+  "durationSeconds": 0.0,
+  "status": "passed",
+  "dryRun": true,
+  "datasetRowIndex": 0,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T18:05:05",
+    "timestamp": "20260430_180505",
+    "runId": "20260430_180505_test_case_POS001",
+    "envv": "X",
+    "username": "row_user"
+  },
+  "warnings": [],
+  "stepResults": [
+    {
+      "stepIndex": 1,
+      "stepType": "click",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 2,
+      "stepType": "type_text",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 3,
+      "stepType": "comment",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "click",
+      "target": "login_button"
+    },
+    {
+      "type": "type_text",
+      "value": "row_user"
+    },
+    {
+      "type": "comment",
+      "text": "ok"
+    }
+  ],
+  "runFolder": "runs/2026-04-30_180505_POS001"
+}

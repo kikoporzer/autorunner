@@ -1,0 +1,64 @@
+{
+  "runId": "20260430_181511_flow_F",
+  "kind": "flow",
+  "name": "F",
+  "startedAt": "2026-04-30T18:15:11",
+  "endedAt": "2026-04-30T18:15:11",
+  "durationSeconds": 0.0,
+  "status": "passed",
+  "dryRun": true,
+  "datasetRowIndex": null,
+  "variables": {
+    "today": "2026-04-30",
+    "now": "2026-04-30T18:15:11",
+    "timestamp": "20260430_181511",
+    "runId": "20260430_181511_flow_F"
+  },
+  "warnings": [],
+  "stepResults": [
+    {
+      "stepIndex": 1,
+      "stepType": "double_click",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 2,
+      "stepType": "right_click",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    },
+    {
+      "stepIndex": 3,
+      "stepType": "click",
+      "status": "passed",
+      "message": "Dry run step validated.",
+      "screenshot": ""
+    }
+  ],
+  "errors": [],
+  "artifacts": {
+    "runJson": "run.json",
+    "reportHtml": "report.html",
+    "screenshotsDir": "screenshots"
+  },
+  "executionPlan": [
+    {
+      "type": "double_click",
+      "x": 10,
+      "y": 20
+    },
+    {
+      "type": "right_click",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "type": "click",
+      "target": "t"
+    }
+  ],
+  "runFolder": "runs/2026-04-30_181511_F"
+}
